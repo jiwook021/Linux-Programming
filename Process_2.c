@@ -1,9 +1,11 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
-#include <stdlib.h>
+#include <time.h>
 #include <unistd.h>
 #include <signal.h>
+
 #define MAX 100
 
 void  INThandler(int);
