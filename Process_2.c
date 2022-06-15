@@ -49,18 +49,18 @@ int main()
 
 
     timer1 = time(&timer);
-  while(1)
-  {  
-    msgrcv(msgid1, &message1, sizeof(message1), 1, 0);  // msgrcv to receive message
-    timer2 = time(&timer);
-    printf("Time: %ld PID: %d msqid1: %d key1: %ld message 1 : %d \n", timer2 - timer1, message2.pid , msgid1 , key1 , message1.number); // display the message
-    timer1 = time(&timer);    
-    sleep(1);
-    message2.number = message2.number+ 2;
-    msgsnd(msgid2, &message2, sizeof(message2), 0); // msgsnd to send message
-    signal(SIGINT, INThandler);
-  }
-    // to destroy the message queue
+      while(1)
+      {  
+        msgrcv(msgid1, &message1, sizeof(message1), 1, 0);  // msgrcv to receive message
+        timer2 = time(&timer);
+        printf("Time:%ld PID:%d msqid1:%d key1:%ld message 1 : %d \n", timer2 - timer1, message2.pid , msgid1 , key1 , message1.number); // display the message
+        timer1 = time(&timer);    
+        sleep(1);
+        message2.number = message2.number+ 2;
+        msgsnd(msgid2, &message2, sizeof(message2), 0); // msgsnd to send message
+        signal(SIGINT, INThandler);
+      }
+        // to destroy the message queue
     msgctl(msgid1, IPC_RMID, NULL);
     msgctl(msgid2, IPC_RMID, NULL);
   
