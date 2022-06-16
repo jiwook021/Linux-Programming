@@ -87,12 +87,12 @@ int main()
         }
         msleep(900);
         message1.number++;
-        if (msgsnd(msgid1, &message1, sizeof(message1), 0) == -1)
+        printf("\n");
+        if (msgsnd((int)msgid1, (void*)&message1, (size_t)sizeof(message1), (int)0) == -1)
         {
         printf("msgnd on A Failed %s\n", strerror(errno));       
         } 
-        printf("\n");
-        if(msgrcv(msgid2, &message2, sizeof(message2), 1, 0)==-1)
+        if(msgrcv((int)msgid2, (void*)&message2, (size_t)sizeof(message2), 1, 0)==-1)
         {
         printf("Msgrcv on A Failed  %s\n", strerror(errno));    
         } 

@@ -90,9 +90,9 @@ int main()
  
       while(1)
       {  
-        if(msgrcv(msgid1, &message1, sizeof(message1), 1, 0)==-1)
+        if(msgrcv((int)msgid1, (void*)&message1, (size_t)sizeof(message1), 1, 0)==-1)
         {
-         printf("Msgrcv on B Failed %s\n", strerror(errno));    
+         printf("Msgrcv on B Failed  %s\n", strerror(errno));    
         } 
         
         printf("\n");
@@ -115,9 +115,9 @@ int main()
         msleep(600);
 
         message2.number = message2.number+ 2;
-        if(msgsnd(msgid2, &message2, sizeof(message2), 0) == -1)
+        if(msgsnd((int)msgid2, (void*)&message2, (size_t)sizeof(message2), (int)0) == -1)
         {
-         printf("Msgnd on B Failed %s\n", strerror(errno));       
+         printf("Msgnd on B Failed  %s\n", strerror(errno));       
         } 
 
         printf("\n");
