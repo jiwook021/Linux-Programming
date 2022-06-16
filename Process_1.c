@@ -43,6 +43,8 @@ int main()
     message1.mesg_type = 1;
     message1.number = 1;
     message1.pid = getpid();
+    signal(SIGINT, INThandler);
+    
       while(1)
       {
         timer1 = time(&timer);
@@ -51,9 +53,7 @@ int main()
         msgsnd(msgid1, &message1, sizeof(message1), 0); // msgsnd to send message
         msgrcv(msgid2, &message2, sizeof(message2), 1, 0);  // msgrcv to receive message
         timer2 = time(&timer);    
-        
-        printf("Time:%ld PID:%d   msqid2:%d key2:%ld message 2 : %d \n", timer2 - timer1, message1.pid , msgid2, key2, message2.number); // display the message
-        signal(SIGINT, INThandler);
+        printf("A Timer:%ld A PID:%d msqid2:%d key2:%ld message 2 : %d \n", timer2 - timer1, message1.pid , msgid2, key2, message2.number); // display the message
       }
     
     msgctl(msgid1, IPC_RMID, NULL);
