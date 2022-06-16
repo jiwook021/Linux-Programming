@@ -14,6 +14,9 @@ time_t timer = 0;
 long timer1 = 0;
 long timer2 = 0;
 
+#define BILLION  1000000000L;
+
+
 struct mesg_buffer1 {
     long mesg_type;
     char mesg_text[100];
@@ -39,25 +42,49 @@ int main()
   long key1 = 0xfffffffe;
   long key2 = 0xfffffffd;
    
+  struct timespec start, stop;
+  double accum;
+
     msgid1 = msgget(key1, 0666 | IPC_CREAT);
     msgid2 = msgget(key2, 0666 | IPC_CREAT);
     
+    if((msgid1==-1) | (msgid2 ==-1))
+    {
+      printf("Msgget on A Failed\n");
+    }
     message1.mesg_type = 1;
     message1.number = 1;
     message1.pid = getpid();
     message1.qid = msgid1;
-    
     signal(SIGINT, INThandler);
     
       while(1)
       {
-        timer1 = time(&timer);
+        if( clock_gettime( CLOCK_REALTIME, &start) == -1 ) 
+        {
+          perror( "clock gettime" );
+          exit( EXIT_FAILURE );
+        }
         sleep(1);
         message1.number++;
-        msgsnd(msgid1, &message1, sizeof(message1), 0); // msgsnd to send message
-        msgrcv(msgid2, &message2, sizeof(message2), 1, 0);  // msgrcv to receive message
-        timer2 = time(&timer);    
-        printf("A_Timer:%ld B_PID:%d B_msqid:%d B_key:%lX B_message: %d \n", timer2 - timer1, message2.pid , message2.qid, key2, message2.number); // display the message
+        if (msgsnd(msgid1, &message1, sizeof(message1), 0) == -1)
+        {
+        printf("msgnd on A Failed\n");       
+        } 
+        if(msgrcv(msgid2, &message2, sizeof(message2), 1, 0)==-1)
+        {
+        printf("Msgrcv on A Failed\n");    
+        } 
+        
+        if( clock_gettime( CLOCK_REALTIME, &stop) == -1 ) 
+        {
+        perror( "clock gettime" );
+        exit( EXIT_FAILURE );
+        }
+        accum = ( stop.tv_sec - start.tv_sec )
+        + ( stop.tv_nsec - start.tv_nsec )/ BILLION; 
+
+        printf("A_Timer:%.2lf B_PID:%d B_msqid:%d B_key:%lX B_message: %d \n", accum, message2.pid , message2.qid, key2, message2.number); // display the message
       }
     
     msgctl(msgid1, IPC_RMID, NULL);
