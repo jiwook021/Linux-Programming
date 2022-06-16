@@ -53,7 +53,7 @@ int main()
         msgsnd(msgid1, &message1, sizeof(message1), 0); // msgsnd to send message
         msgrcv(msgid2, &message2, sizeof(message2), 1, 0);  // msgrcv to receive message
         timer2 = time(&timer);    
-        printf("A Timer:%ld A PID:%d msqid2:%d key2:%ld message 2 : %d \n", timer2 - timer1, message1.pid , msgid2, key2, message2.number); // display the message
+        printf("A_Timer:%ld A_PID:%d B_msqid:%d B_key:%lX B_smessage: %d \n", timer2 - timer1, message1.pid , msgid2, key2, message2.number); // display the message
       }
     
     msgctl(msgid1, IPC_RMID, NULL);
