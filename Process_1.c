@@ -19,6 +19,7 @@ struct mesg_buffer1 {
     char mesg_text[100];
     int number;
     int pid;
+    int qid;
 } message1;
   
   
@@ -27,6 +28,7 @@ struct mesg_buffer1 {
     char mesg_text[100];
     int number;
     int pid;
+    int qid;
  } message2;
   
 
@@ -43,6 +45,8 @@ int main()
     message1.mesg_type = 1;
     message1.number = 1;
     message1.pid = getpid();
+    message1.qid = msgid1;
+    
     signal(SIGINT, INThandler);
     
       while(1)
@@ -53,7 +57,7 @@ int main()
         msgsnd(msgid1, &message1, sizeof(message1), 0); // msgsnd to send message
         msgrcv(msgid2, &message2, sizeof(message2), 1, 0);  // msgrcv to receive message
         timer2 = time(&timer);    
-        printf("A_Timer:%ld A_PID:%d B_msqid:%d B_key:%lX B_smessage: %d \n", timer2 - timer1, message1.pid , msgid2, key2, message2.number); // display the message
+        printf("A_Timer:%ld B_PID:%d B_msqid:%d B_key:%lX B_message: %d \n", timer2 - timer1, message2.pid , message2.qid, key2, message2.number); // display the message
       }
     
     msgctl(msgid1, IPC_RMID, NULL);
@@ -64,10 +68,9 @@ int main()
 
 void INThandler(int sig)
 {
-  signal(sig, SIG_IGN);
   msgctl(msgid1, IPC_RMID, NULL);
   msgctl(msgid2, IPC_RMID, NULL);
   kill(message2.pid,SIGSEGV);
-     
-     exit(0);
+   
+  exit(0);
 }
