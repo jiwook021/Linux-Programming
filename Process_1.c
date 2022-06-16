@@ -5,6 +5,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <signal.h>
+#include <errno.h> 
 
 #define MAX 100
 
@@ -16,6 +17,26 @@ long timer2 = 0;
 
 #define BILLION  1000000000L;
 
+int msleep(long msec)
+{
+    struct timespec ts;
+    int res;
+
+    if (msec < 0)
+    {
+        errno = EINVAL;
+        return -1;
+    }
+
+    ts.tv_sec = msec / 1000;
+    ts.tv_nsec = (msec % 1000) * 1000000;
+
+    do {
+        res = nanosleep(&ts, &ts);
+    } while (res && errno == EINTR);
+
+    return res;
+}
 
 struct mesg_buffer1 {
     long mesg_type;
@@ -65,7 +86,7 @@ int main()
           perror( "clock gettime" );
           exit( EXIT_FAILURE );
         }
-        sleep(1);
+        msleep(900);
         message1.number++;
         if (msgsnd(msgid1, &message1, sizeof(message1), 0) == -1)
         {
@@ -81,10 +102,9 @@ int main()
         perror( "clock gettime" );
         exit( EXIT_FAILURE );
         }
-        accum = ( stop.tv_sec - start.tv_sec )
-        + ( stop.tv_nsec - start.tv_nsec )/ BILLION; 
+        accum = ( stop.tv_sec - start.tv_sec )+ (float)( stop.tv_nsec - start.tv_nsec )/BILLION; 
 
-        printf("A_Timer:%.2lf B_PID:%d B_msqid:%d B_key:%lX B_message: %d \n", accum, message2.pid , message2.qid, key2, message2.number); // display the message
+        printf("A_Timer:%.4lf B_PID:%d B_msqid:%d B_key:%lX B_message: %d \n", accum, message2.pid , message2.qid, key2, message2.number); // display the message
       }
     
     msgctl(msgid1, IPC_RMID, NULL);
