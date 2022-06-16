@@ -53,6 +53,7 @@ struct mesg_buffer1 {
     int qid; 
 } message2;
   
+char * strerror (int errnum);
 
 int msgid1=0,msgid2=0;
 
@@ -91,7 +92,7 @@ int main()
       {  
         if(msgrcv(msgid1, &message1, sizeof(message1), 1, 0)==-1)
         {
-         printf("Msgrcv on B Failed\n");    
+         printf("Msgrcv on B Failed %s\n", strerror(errno));    
         } 
         
         printf("\n");
@@ -116,7 +117,7 @@ int main()
         message2.number = message2.number+ 2;
         if(msgsnd(msgid2, &message2, sizeof(message2), 0) == -1)
         {
-         printf("Msgnd on B Failed\n");       
+         printf("Msgnd on B Failed %s\n", strerror(errno));       
         } 
 
         printf("\n");

@@ -11,9 +11,6 @@
 
 void  INThandler(int);
 
-time_t timer = 0;
-long timer1 = 0;
-long timer2 = 0;
 
 #define BILLION  1000000000L;
 
@@ -56,6 +53,8 @@ struct mesg_buffer1 {
  } message2;
   
 
+char * strerror (int errnum);
+
 int msgid1=0,msgid2=0;
   
 int main()
@@ -90,12 +89,12 @@ int main()
         message1.number++;
         if (msgsnd(msgid1, &message1, sizeof(message1), 0) == -1)
         {
-        printf("msgnd on A Failed\n");       
+        printf("msgnd on A Failed %s\n", strerror(errno));       
         } 
         printf("\n");
         if(msgrcv(msgid2, &message2, sizeof(message2), 1, 0)==-1)
         {
-        printf("Msgrcv on A Failed\n");    
+        printf("Msgrcv on A Failed  %s\n", strerror(errno));    
         } 
         printf("\n");
         
