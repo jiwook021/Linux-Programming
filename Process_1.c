@@ -92,10 +92,12 @@ int main()
         {
         printf("msgnd on A Failed\n");       
         } 
+        printf("\n");
         if(msgrcv(msgid2, &message2, sizeof(message2), 1, 0)==-1)
         {
         printf("Msgrcv on A Failed\n");    
         } 
+        printf("\n");
         
         if( clock_gettime( CLOCK_REALTIME, &stop) == -1 ) 
         {
@@ -104,7 +106,7 @@ int main()
         }
         accum = ( stop.tv_sec - start.tv_sec )+ (float)( stop.tv_nsec - start.tv_nsec )/BILLION; 
 
-        printf("A_Timer:%.4lf B_PID:%d B_msqid:%d B_key:%lX B_message: %d \n", accum, message2.pid , message2.qid, key2, message2.number); // display the message
+        printf("A_Timer:%.4lf B_PID:%d B_msqid:%d B_key:%lX B_message: %d", accum, message2.pid , message2.qid, key2, message2.number); // display the message
       }
     
     msgctl(msgid1, IPC_RMID, NULL);
