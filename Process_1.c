@@ -88,11 +88,11 @@ int main()
         msleep(900);
         message1.number++;
         printf("\n");
-        if (msgsnd((int)msgid1, (void*)&message1, (size_t)sizeof(message1), (int)0) == -1)
+        if (msgsnd((int)msgid1, (void*)&message1, (size_t)sizeof(message1)-(size_t)sizeof(message1.mesg_type), (int)0) == -1)
         {
         printf("msgnd on A Failed %s\n", strerror(errno));       
         } 
-        if(msgrcv((int)msgid2, (void*)&message2, (size_t)sizeof(message2), 1, 0)==-1)
+        if(msgrcv((int)msgid2, (void*)&message2, (size_t)sizeof(message2)-(size_t)sizeof(message2.mesg_type), 1, 0)==-1)
         {
         printf("Msgrcv on A Failed  %s\n", strerror(errno));    
         } 
