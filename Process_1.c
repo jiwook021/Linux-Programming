@@ -111,6 +111,7 @@ int main()
     msgctl(msgid1, IPC_RMID, NULL);
     msgctl(msgid2, IPC_RMID, NULL);
      
+     
     return 0;
 }
 
