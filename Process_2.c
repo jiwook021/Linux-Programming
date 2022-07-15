@@ -6,13 +6,15 @@
 #include <unistd.h>
 #include <signal.h>
 #include <errno.h> 
-
+#include <pthread.h>
 #define MAX 100
 
 void  INThandler(int);
 
 #define BILLION  1000000000L;
 
+ struct timespec start, stop, init_start, thread_stop;
+ double accum,Total_time;
 
 int msleep(long msec)
 {
@@ -35,6 +37,29 @@ int msleep(long msec)
     return res;
 }
 
+static void * threadFunc(void *arg)
+{
+   if (clock_gettime(CLOCK_REALTIME, &init_start) == -1 ) 
+     {
+          perror( "clock gettime" );
+          exit( EXIT_FAILURE );
+     }
+  while(1)
+  {
+    double *s = (double *) arg;
+      if (clock_gettime(CLOCK_REALTIME, &thread_stop) == -1 ) 
+        {
+          perror( "clock gettime" );
+          exit( EXIT_FAILURE );
+        }
+    msleep(500);
+    
+    Total_time = ( thread_stop.tv_sec - init_start.tv_sec )+ (float)( thread_stop.tv_nsec - init_start.tv_nsec )/BILLION; 
+    printf("\nB_Total_Timer:%.4lf", Total_time);
+    
+  }
+  return (void *) arg;
+}
 // structure for message queue
 struct mesg_buffer1 {
     long mesg_type;
@@ -57,12 +82,12 @@ char * strerror (int errnum);
 
 int msgid1=0,msgid2=0;
 
+
+
+
 int main()
 {
-  struct timespec start, stop;
-  double accum;
-
-   
+ 
     long key1 = 0xfffffffe;
     long key2 = 0xfffffffd;
    
@@ -87,6 +112,16 @@ int main()
       }
 
     signal(SIGINT, INThandler);
+
+
+     int x; 
+      pthread_t t1;
+      int s;
+        s = pthread_create(&t1, NULL, threadFunc, &x);
+      if (s != 0)
+        printf("Error pthread_create");
+
+
  
       while(1)
       {  
@@ -123,16 +158,34 @@ int main()
         printf("\n");
       }
 
-    msgctl(msgid1, IPC_RMID, NULL);
-    msgctl(msgid2, IPC_RMID, NULL);
+    if(-1 == msgctl(msgid1, IPC_RMID, NULL))
+    {
+      printf("msgctl on msgid1 Failed  %s\n", strerror(errno));    
+    }
+        if(-1 == msgctl(msgid2, IPC_RMID, NULL))
+    {
+      printf("msgctl on msgid2 Failed  %s\n", strerror(errno));    
+    }
     
     return 0;
 }
 
 void  INThandler(int sig)
 {
-  msgctl(msgid1, IPC_RMID, NULL);
-  msgctl(msgid2, IPC_RMID, NULL);
-  kill(message1.pid,SIGSEGV);    
+      if(-1 == msgctl(msgid1, IPC_RMID, NULL))
+    {
+      printf("msgctl on msgid1 Failed  %s\n", strerror(errno));    
+    }
+    
+    if(-1 == msgctl(msgid2, IPC_RMID, NULL))
+    {
+      printf("msgctl on msgid2 Failed  %s\n", strerror(errno));    
+    }
+    if ( -1 == kill(message1.pid,SIGSEGV))
+    {
+
+      
+      printf("Kill on Message1.pid Failed  %s\n", strerror(errno));    
+    }
   exit(0);
 }

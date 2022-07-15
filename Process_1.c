@@ -6,13 +6,17 @@
 #include <unistd.h>
 #include <signal.h>
 #include <errno.h> 
-
+#include <pthread.h>
 #define MAX 100
 
 void  INThandler(int);
 
 
 #define BILLION  1000000000L;
+
+ struct timespec start, stop, init_start, thread_stop;
+ double accum,Total_time;
+
 
 int msleep(long msec)
 {
@@ -33,6 +37,30 @@ int msleep(long msec)
     } while (res && errno == EINTR);
 
     return res;
+}
+
+static void * threadFunc(void *arg)
+{
+   if (clock_gettime(CLOCK_REALTIME, &init_start) == -1 ) 
+     {
+          perror( "clock gettime" );
+          exit( EXIT_FAILURE );
+     }
+  while(1)
+  {
+    double *s = (double *) arg;
+      if (clock_gettime(CLOCK_REALTIME, &thread_stop) == -1 ) 
+        {
+          perror( "clock gettime" );
+          exit( EXIT_FAILURE );
+        }
+    msleep(900);
+    
+    Total_time = ( thread_stop.tv_sec - init_start.tv_sec )+ (float)( thread_stop.tv_nsec - init_start.tv_nsec )/BILLION; 
+    printf("\nA_Total_Timer:%.4lf", Total_time);
+    
+  }
+  return (void *) arg;
 }
 
 struct mesg_buffer1 {
@@ -62,12 +90,11 @@ int main()
   long key1 = 0xfffffffe;
   long key2 = 0xfffffffd;
    
-  struct timespec start, stop;
-  double accum;
-
-    msgid1 = msgget(key1, 0666 | IPC_CREAT);
+  
+    msgid1 = msgget(key1, 0666 | IPC_CREAT);  
     msgid2 = msgget(key2, 0666 | IPC_CREAT);
-    
+  
+   
     if((msgid1==-1) | (msgid2 ==-1))
     {
       printf("Msgget on A Failed\n");
@@ -78,6 +105,13 @@ int main()
     message1.qid = msgid1;
     signal(SIGINT, INThandler);
     
+      int x; 
+      pthread_t t1;
+      int s;
+        s = pthread_create(&t1, NULL, threadFunc, &x);
+      if (s != 0)
+        printf("Error pthread_create");
+
       while(1)
       {
         if( clock_gettime( CLOCK_REALTIME, &start) == -1 ) 
@@ -92,7 +126,7 @@ int main()
         {
         printf("msgnd on A Failed %s\n", strerror(errno));       
         } 
-        if(msgrcv((int)msgid2, (void*)&message2, (size_t)sizeof(message2)-(size_t)sizeof(message2.mesg_type), 1, 0)==-1)
+        if(msgrcv((int)msgid2, (void*)&message2, (size_t)sizeof(message2)-(size_t)sizeof(message2.mesg_type), 1, 0) == -1)
         {
         printf("Msgrcv on A Failed  %s\n", strerror(errno));    
         } 
@@ -108,18 +142,34 @@ int main()
         printf("A_Timer:%.4lf B_PID:%d B_msqid:%d B_key:%lX B_message: %d", accum, message2.pid , message2.qid, key2, message2.number); // display the message
       }
     
-    msgctl(msgid1, IPC_RMID, NULL);
-    msgctl(msgid2, IPC_RMID, NULL);
+    if(-1 == msgctl(msgid1, IPC_RMID, NULL))
+    {
+      printf("msgctl on msgid1 Failed  %s\n", strerror(errno));    
+    }
+         if(-1 == msgctl(msgid2, IPC_RMID, NULL))
+    {
+      printf("msgctl on msgid2 Failed  %s\n", strerror(errno));    
+    }
      
+
      
     return 0;
 }
 
 void INThandler(int sig)
 {
-  msgctl(msgid1, IPC_RMID, NULL);
-  msgctl(msgid2, IPC_RMID, NULL);
-  kill(message2.pid,SIGSEGV);
-   
+      if(-1 == msgctl(msgid1, IPC_RMID, NULL))
+    {
+      printf("msgctl on msgid1 Failed  %s\n", strerror(errno));    
+    }
+       if(-1 == msgctl(msgid2, IPC_RMID, NULL))
+    {
+      printf("msgctl on msgid2 Failed  %s\n", strerror(errno));    
+    }
+  
+    if ( -1 == kill(message2.pid,SIGSEGV))
+    {
+      printf("Kill on Message2.pid Failed  %s\n", strerror(errno));    
+    }
   exit(0);
 }
