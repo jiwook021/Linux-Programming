@@ -8,7 +8,11 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
+<<<<<<< HEAD
 # Make data base, printed on Sun Jul 10 22:31:22 2022
+=======
+# Make data base, printed on Sun Jul 10 22:37:30 2022
+>>>>>>> 00d0c42137c4be266b6747f71973781e95b6d11e
 
 # Variables
 
@@ -43,7 +47,11 @@ GDMSESSION = ubuntu
 # environment
 XMODIFIERS = @im=ibus
 # makefile
+<<<<<<< HEAD
 CURDIR := /home/jiwook/Desktop/Linux_test
+=======
+CURDIR := /home/jiwook/Desktop/Linux_test/Linux-IPC-Message-Queue-1
+>>>>>>> 00d0c42137c4be266b6747f71973781e95b6d11e
 # makefile
 SHELL = /bin/sh
 # environment
@@ -127,7 +135,11 @@ DISPLAY = :0
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
+<<<<<<< HEAD
 PWD = /home/jiwook/Desktop/Linux_test
+=======
+PWD = /home/jiwook/Desktop/Linux_test/Linux-IPC-Message-Queue-1
+>>>>>>> 00d0c42137c4be266b6747f71973781e95b6d11e
 # default
 .LOADED := 
 # environment
@@ -173,7 +185,11 @@ SHLVL = 0
 # environment
 GNOME_SHELL_SESSION_MODE = ubuntu
 # environment
+<<<<<<< HEAD
 VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-56d6fedc-27bb-43cb-8252-47e061aad3aa.sock
+=======
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-ce0552f8-52f8-4ff9-9835-7ee226b037ce.sock
+>>>>>>> 00d0c42137c4be266b6747f71973781e95b6d11e
 # default
 MAKE_VERSION := 4.2.1
 # environment
@@ -261,9 +277,15 @@ VSCODE_PID = 7945
 
 # Directories
 
+<<<<<<< HEAD
 # . (device 2053, inode 1835110): 14 files, no impossibilities.
 
 # 14 files, no impossibilities in 1 directories.
+=======
+# . (device 2053, inode 8521839): 10 files, no impossibilities.
+
+# 10 files, no impossibilities in 1 directories.
+>>>>>>> 00d0c42137c4be266b6747f71973781e95b6d11e
 
 # Implicit Rules
 
@@ -282,7 +304,11 @@ all:
 Makefile:
 #  Implicit rule search has been done.
  
+<<<<<<< HEAD
 #  Last modified 2022-06-07 02:44:00.578631073
+=======
+#  Last modified 2022-06-14 22:57:36.4768235
+>>>>>>> 00d0c42137c4be266b6747f71973781e95b6d11e
 #  File has been updated.
 #  Successfully updated.
 
@@ -321,6 +347,7 @@ Process_2.c:
 
 # No general ('VPATH' variable) search path.
 
+<<<<<<< HEAD
 # strcache buffers: 1 (0) / strings = 20 / storage = 209 B / avg = 10 B
 # current buf: size = 8162 B / used = 209 B / count = 20 / avg = 10 B
 
@@ -328,5 +355,14 @@ Process_2.c:
 # hash-table stats:
 # Load=20/8192=0%, Rehash=0, Collisions=1/27=4%
 # Finished Make data base on Sun Jul 10 22:31:22 2022
+=======
+# strcache buffers: 1 (0) / strings = 16 / storage = 148 B / avg = 9 B
+# current buf: size = 8162 B / used = 148 B / count = 16 / avg = 9 B
+
+# strcache performance: lookups = 23 / hit rate = 30%
+# hash-table stats:
+# Load=16/8192=0%, Rehash=0, Collisions=1/23=4%
+# Finished Make data base on Sun Jul 10 22:37:30 2022
+>>>>>>> 00d0c42137c4be266b6747f71973781e95b6d11e
 
  

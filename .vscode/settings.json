@@ -1,8 +1,12 @@
 {
     "makefile.extensionOutputFolder": "./.vscode",
     "files.associations": {
+<<<<<<< HEAD
         "stdio.h": "c",
         "ipc.h": "c",
         "msg.h": "c"
+=======
+        "stdlib.h": "c"
+>>>>>>> 00d0c42137c4be266b6747f71973781e95b6d11e
     }
 }
