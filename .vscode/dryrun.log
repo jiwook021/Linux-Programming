@@ -1,0 +1,6 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/jiwook/Desktop/Linux_test'
+gcc -o Process_1 Process_1.c 
+gcc -o Process_2 Process_2.c
+make: Leaving directory '/home/jiwook/Desktop/Linux_test'
+ 
