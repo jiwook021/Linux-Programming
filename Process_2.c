@@ -1,20 +1,56 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/ipc.h>
-#include <sys/msg.h>
-#include <time.h>
 #include <unistd.h>
+
+
+#include <time.h>
 #include <signal.h>
 #include <errno.h> 
 #include <pthread.h>
+#include <string.h>
+#include <ctype.h>
+
+
+#include <sys/ipc.h>
+#include <sys/msg.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 #define MAX 100
 
 void  INThandler(int);
 
 #define BILLION  1000000000L;
 
+char * strerror (int errnum);
+
+int msgid1=0,msgid2=0;
+int x; 
+pthread_t t2;
+int s2;
+void *res2;
+int fd2; 
+
  struct timespec start, stop, init_start, thread_stop;
  double accum,Total_time;
+
+
+char current_time[20] = "Process Start Time: ";
+char Message_Received[30] = "s     Message Received: ";
+
+char nl[10] = "\n";
+char message[10];
+char Time_message[10];
+
+char *my_itoa(int num, char *str)
+{
+        if(str == NULL)
+        {
+                return NULL;
+        }
+        sprintf(str, "%d", num);
+        return str;
+}
 
 int msleep(long msec)
 {
@@ -46,7 +82,6 @@ static void * threadFunc(void *arg)
      }
   while(1)
   {
-    double *s = (double *) arg;
       if (clock_gettime(CLOCK_REALTIME, &thread_stop) == -1 ) 
         {
           perror( "clock gettime" );
@@ -78,11 +113,6 @@ struct mesg_buffer1 {
     int qid; 
 } message2;
   
-char * strerror (int errnum);
-
-int msgid1=0,msgid2=0;
-
-
 
 
 int main()
@@ -114,12 +144,17 @@ int main()
     signal(SIGINT, INThandler);
 
 
-     int x; 
-      pthread_t t1;
-      int s;
-        s = pthread_create(&t1, NULL, threadFunc, &x);
-      if (s != 0)
+
+        s2 = pthread_create(&t2, NULL, threadFunc, &x);
+      if (s2 != 0)
         printf("Error pthread_create");
+
+      fd2 = open("process2.log", O_WRONLY | O_CREAT |  O_APPEND, S_IRUSR | S_IWUSR);
+        if (fd2 == -1)
+          printf("Error opening file");
+      
+      char first[20] = "Process_2 Open\n";
+      write(fd2, first, strlen(first));
 
 
  
@@ -155,6 +190,17 @@ int main()
          printf("Msgnd on B Failed  %s\n", strerror(errno));       
         } 
 
+        my_itoa((int)message1.number, message);
+        my_itoa((int)Total_time, Time_message);
+   
+
+
+
+        write(fd2, current_time, strlen(current_time));       
+        write(fd2, Time_message, strlen(Time_message));
+        write(fd2, Message_Received, strlen(Message_Received));
+        write(fd2, message, strlen(message));
+        write(fd2, nl, strlen(nl));
         printf("\n");
       }
 
@@ -166,12 +212,17 @@ int main()
     {
       printf("msgctl on msgid2 Failed  %s\n", strerror(errno));    
     }
-    
+     s2 = pthread_join(t2, &res2);
+      if (s2 != 0)
+      {
+        printf("Thread Join on Process_2 Failed");
+      }
     return 0;
 }
 
 void  INThandler(int sig)
 {
+   
       if(-1 == msgctl(msgid1, IPC_RMID, NULL))
     {
       printf("msgctl on msgid1 Failed  %s\n", strerror(errno));    
@@ -187,5 +238,7 @@ void  INThandler(int sig)
       
       printf("Kill on Message1.pid Failed  %s\n", strerror(errno));    
     }
+
+    
   exit(0);
 }
