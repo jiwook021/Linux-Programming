@@ -149,7 +149,7 @@ int main()
       if (s2 != 0)
         printf("Error pthread_create");
 
-      fd2 = open("process2.log", O_WRONLY | O_CREAT |  O_APPEND, S_IRUSR | S_IWUSR);
+      fd2 = open("Process_2.log", O_WRONLY | O_CREAT |  O_APPEND, S_IRUSR | S_IWUSR);
         if (fd2 == -1)
           printf("Error opening file");
       

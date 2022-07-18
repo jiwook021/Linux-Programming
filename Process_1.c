@@ -152,7 +152,7 @@ int main()
 
 
      
-      fd1 = open("process1.log", O_WRONLY | O_CREAT |  O_APPEND, S_IRUSR | S_IWUSR);
+      fd1 = open("Process_1.log", O_WRONLY | O_CREAT |  O_APPEND, S_IRUSR | S_IWUSR);
         if (fd1 == -1)
           printf("Error opening file");
       

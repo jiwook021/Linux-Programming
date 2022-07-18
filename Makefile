@@ -14,6 +14,8 @@ all:
 clean:
 	$(RM) $(Target)
 	$(RM) $(Target2)
+	$(RM) $(Target).log
+	$(RM) $(Target2).log
 
 
 
