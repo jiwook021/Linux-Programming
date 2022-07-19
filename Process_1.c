@@ -222,15 +222,17 @@ void INThandler(int sig)
     printf("msgctl on msgid2 Failed  %s\n", strerror(errno));    
   }
   
-  if ( -1 == kill(message2.pid,SIGSEGV))
-  {
-    printf("Kill on Message2.pid Failed  %s\n", strerror(errno));    
-  }
- 
   if (-1 == close(fd1))
   {
     printf("Close Failed! %s\n", strerror(errno));      
   }
+
+  if ( -1 == kill(message2.pid,SIGTERM))
+  {
+    printf("Kill on Message2.pid Failed  %s\n", strerror(errno));    
+  }
+ 
+
    
   exit(0);
 }
