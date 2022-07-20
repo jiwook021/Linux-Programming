@@ -20,9 +20,10 @@
 struct timespec start, stop, init_start, thread_stop;
 double accum,Total_time;
 char * strerror (int errnum);
-int x; 
+int x;
 pthread_t t1;
 int s1;
+
 void *res1;
 int msgid1=0,msgid2=0;
 int fd1; 
@@ -40,14 +41,17 @@ void ALRMhandler();
 int msleep(long); 
 char *my_itoa(int, char*);
 static void * threadFunc(void *arg);
-
+//static void * threadFunc2(void *arg);
+//int x2; 
+//pthread_t t2;
+//int s2;
 struct mesg_buffer1 {
     long mesg_type;
     char mesg_text[100];
     int number;
     int pid;
     int qid;
-} message1;
+} message1; 
   
   
   struct mesg_buffer2 {
@@ -72,7 +76,8 @@ int main()
   {
     perror("Msgget on A Failed\n");
   }
-    
+
+
   message1.mesg_type = 1;
   message1.number = 1;
   message1.pid = getpid();
@@ -86,6 +91,12 @@ int main()
   s1 = pthread_create(&t1, NULL, threadFunc, &x);
     if (0 != s1)
       perror("Error pthread_create\n");
+
+  // s2 = pthread_create(&t2, NULL, threadFunc2, &x2);
+  //   if (0 != s2)
+  //     perror("Error pthread_create\n");
+
+  execlp("./Process_2 &", "./Process_2 &", NULL);  
 
   fd1 = open("Process_1.log", O_WRONLY | O_CREAT |  O_APPEND, S_IRUSR | S_IWUSR);
     if (-1 == fd1)
@@ -176,7 +187,7 @@ int main()
 
 void ALRMhandler()
 {
-  printf("\nAlarm Signal Generated!");
+  printf("\nAlarm Signal Generated from A!");
   alarm(5);
 }
      
@@ -263,3 +274,12 @@ static void * threadFunc(void *arg)
     }
   return (void *) arg;
 }
+
+// static void * threadFunc2(void *arg)
+// {
+//   const char * command = "./Process_2 &";
+   
+//   system(command);
+   
+//   return (void *) arg;
+// }
