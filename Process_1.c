@@ -53,7 +53,6 @@ struct mesg_buffer1 {
     int qid;
 } message1; 
   
-  
   struct mesg_buffer2 {
     long mesg_type;
     char mesg_text[100];
