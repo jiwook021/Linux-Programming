@@ -1,7 +1,7 @@
 make --dry-run --always-make --keep-going --print-directory
-make: Entering directory '/home/jiwook/Desktop/Linux_test'
+make: Entering directory '/home/jiwook/Linux-IPC-Message-Queue'
 gcc -g -Wall -o Process_1 Process_1.c -lpthread
 gcc -g -Wall -o Process_2 Process_2.c -lpthread
 gcc -g -Wall -o TotalProcess TotalProcess.c -lpthread
-make: Leaving directory '/home/jiwook/Desktop/Linux_test'
+make: Leaving directory '/home/jiwook/Linux-IPC-Message-Queue'
  
