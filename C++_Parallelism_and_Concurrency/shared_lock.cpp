@@ -15,9 +15,12 @@ void print_exclusive()
 {
     uniq_lck l {shared_mut, defer_lock};
 
-    if (l.try_lock()) {
+    if (l.try_lock()) 
+    {
         cout << "Got exclusive lock.\n";
-    } else {
+    } 
+    else 
+    {
         cout << "Unable to lock exclusively.\n";
     }
 }
@@ -26,7 +29,6 @@ void exclusive_throw()
 {
     uniq_lck l {shared_mut};
     throw 123;
-
 }
 
 int main()
